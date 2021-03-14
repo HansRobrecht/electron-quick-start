@@ -11,3 +11,14 @@ main
     align-items: center;
     flex-direction: column;
 }
+main input[type=text]
+{
+    margin-bottom: 1.5rem;
+    width: 15rem;
+}
+main .buttons
+{
+    width: 25%;
+    display: flex;
+    justify-content: space-around;
+}
