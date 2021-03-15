@@ -33,7 +33,7 @@ main form label{
     display: inline-block;
 }
 
-main form input[type=text]{
+main form input[type=text], main form input[type=password]{
     margin-bottom: 1.5rem;
     border-radius: 0.25rem;
 }
