@@ -1,0 +1,46 @@
+body{
+    background-image: url("../img/Castle_Background.jpg");
+}
+
+header h1
+{
+    display: flex;
+    justify-content: center;
+    font-size: 5rem;
+    color: white;
+}
+
+main{
+    display: flex; 
+    justify-content: center;
+    align-items: center;   
+}
+
+main form
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: gray;
+    padding: 5rem 5rem;
+    width: 50%;
+    border-radius: 2.5rem;
+    opacity: 50%;
+}
+
+main form label{
+    display: inline-block;
+}
+
+main form input[type=text]{
+    margin-bottom: 1.5rem;
+    border-radius: 0.25rem;
+}
+
+main form .buttons{
+    width: 25%;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 0.5rem;
+}
