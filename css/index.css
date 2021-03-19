@@ -1,5 +1,8 @@
 body{
     background-image: url("../img/Castle_Background.jpg");
+    height: 97vh;
+    display: flex;
+    flex-direction: column;
 }
 
 header h1
@@ -44,3 +47,14 @@ main form .buttons{
     justify-content: space-around;
     border-radius: 0.5rem;
 }
+
+footer{
+    margin-top: auto;
+}
+
+footer p, footer p a{
+    color: white;
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
