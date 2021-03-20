@@ -2,7 +2,7 @@ var i = 0;
 function move() {
     if (i == 0) {
         i = 1;
-        var elem = document.getElementById("bar");
+        var elem = document.getElementById('bar');
         var width = 10;
         var id = setInterval(frame, 10);
         function frame() {
