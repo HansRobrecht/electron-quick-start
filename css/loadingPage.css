@@ -2,7 +2,7 @@
 #word{
     color: brown;
 }
-main #bar {
+#bar {
     width: 10%;
     height: 30px;
     background-color: #eb0303ad;
@@ -12,7 +12,7 @@ main #bar {
     border-color: black;
 }
 
-main #progressBar {
+#progressBar {
     width: 100%;
     background-color: grey;
 }  
