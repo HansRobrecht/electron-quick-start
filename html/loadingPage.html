@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/loadingPage.css">
+    <title>Castle Siege</title>
+</head>
+<body>
+    <header>
+        <h1 id ="word">The game is loading</h1>
+    </header>
+    <main>
+        <div id = "progressBar">
+            <div id = "bar">10%</div>
+        </div>
+        <br>
+        <button id = "buttonBar" onclick="move()">Click Me</button>
+    </main>
+    <footer>
+
+    </footer>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/renderer.js"></script>
+</body>
+</html>
