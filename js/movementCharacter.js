@@ -12,10 +12,13 @@
         
         let moveCharacterHorizontally = function(xValues){
             const playerObject = document.getElementById('player');
-            if(playerCycle !== '../img/Running_Cycle.gif'){
+            if(xValues < 0 && playerCycle !== '../img/Running_Cycle_Left.gif'){
+                changeCharacterAnimation('Running_Cycle_Left.gif');
+            }
+            else if(xValues > 0 && playerCycle !== '../img/Running_Cycle.gif'){
                 changeCharacterAnimation('Running_Cycle.gif');
             }
-            playerObject.style.left = parseInt(playerObject.style.left) + xValues + 'rem';
+            playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)/2 + 'rem';
         };
 
         let moveCharacterVertically = function(yValues){
@@ -23,7 +26,7 @@
             if(playerCycle !== '../img/Running_Cycle.gif'){
                 changeCharacterAnimation('Running_Cycle.gif');
             }
-            playerObject.style.top = parseInt(playerObject.style.top) + yValues + 'rem';
+            playerObject.style.top = parseFloat(playerObject.style.top) + yValues/2 + 'rem';
         }
 
         let changeCharacterAnimation = function(gifFile){
