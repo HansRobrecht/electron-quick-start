@@ -37,7 +37,7 @@
 
         let moveCharacterVertically = function(yValues){
             const playerObject = document.getElementById('player');
-            console.log(playerObject.style.left + ' - ' + playerObject.style.top);
+            //console.log(playerObject.style.left + ' - ' + playerObject.style.top);
             if(playerCycle !== '../img/Running_Cycle.gif'){
                 changeCharacterAnimation('Running_Cycle.gif');
             }
@@ -70,26 +70,29 @@
                 let topPosition = wall.offsetTop/10;
                 //console.log(leftPosition);
                 //console.log(topPosition);
-                for(let dmx = 0; dmx < wall.clientWidth/10;){
-                    for(let xmd = 0; xmd < wall.clientHeight/10;){
-                        hiddenWalls.push([(leftPosition + dmx),(topPosition + xmd)]);
-                        console.log(`[${dmx} - ${wall.clientHeight/10}] = [${xmd} - ${wall.clientWidth/10}]`);
-                        xmd = xmd + 0.5;
+                for(let dmx = 0; dmx < wall.clientWidth/10; dmx++){
+                    for(let xmd = 0; xmd < wall.clientHeight/10; xmd++){
+                        hiddenWalls.push([(leftPosition + dmx/2),(topPosition + xmd/2)]);
+                        hiddenWalls.push([(leftPosition + dmx/2),(topPosition - xmd/2)]);
+                        hiddenWalls.push([(leftPosition - dmx/2),(topPosition - xmd/2)]);
+                        hiddenWalls.push([(leftPosition - dmx/2),(topPosition + xmd/2)]);
+                        //console.log(`[${dmx} - ${wall.clientHeight/10}] = [${xmd} - ${wall.clientWidth/10}]`);
+                        //xmd = xmd + 0.5;
                     }
-                    dmx = dmx + 0.5;
+                    //dmx = dmx + 0.5;
                 }
             }
             console.table(hiddenWalls);
         };
 
         let testHiddenWall = function(xCoordinate, yCoordinate){
-            console.log(xCoordinate + ' - ' + yCoordinate);
+            //console.log(xCoordinate + ' - ' + yCoordinate);
             if(hiddenWalls.length === 0){
                 //hiddenWalls.push([7,5], [10,21], [10,22]);
             }
             for(let dmx = 0; dmx < hiddenWalls.length; dmx++){
                 if(hiddenWalls[dmx][0] == xCoordinate && hiddenWalls[dmx][1] == yCoordinate){
-                    console.log('match');
+                    //console.log('match');
                     return true;
                 }
             }
