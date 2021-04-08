@@ -1,0 +1,11 @@
+#wall1{
+    position: absolute;
+    top: 8rem;
+    left: 20rem;
+}
+
+#wall2{
+    position: absolute;
+    top: 25rem;
+    left: 50rem;
+}

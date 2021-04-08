@@ -62,12 +62,31 @@
             playerObject.src = playerCycle;
         };
 
+        let generateHiddenWalls = function(){
+            const walls = document.querySelectorAll('.wall');
+            console.log(walls);
+            for(let wall of walls){
+                let leftPosition = wall.offsetLeft/10;
+                let topPosition = wall.offsetTop/10;
+                //console.log(leftPosition);
+                //console.log(topPosition);
+                for(let dmx = 0; dmx < wall.clientWidth/10;){
+                    for(let xmd = 0; xmd < wall.clientHeight/10;){
+                        hiddenWalls.push([(leftPosition + dmx),(topPosition + xmd)]);
+                        console.log(`[${dmx} - ${wall.clientHeight/10}] = [${xmd} - ${wall.clientWidth/10}]`);
+                        xmd = xmd + 0.5;
+                    }
+                    dmx = dmx + 0.5;
+                }
+            }
+            console.table(hiddenWalls);
+        };
+
         let testHiddenWall = function(xCoordinate, yCoordinate){
             console.log(xCoordinate + ' - ' + yCoordinate);
             if(hiddenWalls.length === 0){
-                hiddenWalls.push([7,5], [10,21], [10,22]);
+                //hiddenWalls.push([7,5], [10,21], [10,22]);
             }
-            //console.table(hiddenWalls);
             for(let dmx = 0; dmx < hiddenWalls.length; dmx++){
                 if(hiddenWalls[dmx][0] == xCoordinate && hiddenWalls[dmx][1] == yCoordinate){
                     console.log('match');
@@ -77,7 +96,7 @@
             return false;
         };
 
-        testHiddenWall(10,20);
+        generateHiddenWalls();
 
         window.onkeydown = function(pressedKey){
             switch(pressedKey.keyCode){
