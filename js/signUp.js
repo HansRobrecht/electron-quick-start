@@ -1,11 +1,10 @@
 "use strict";
 
-    document.getElementById("signUp").addEventListener("submit", createPost);
+    document.getElementById("signUp").addEventListener("click", createPost);
 
 
     function createPost()
     {
-        alert("hello");
         let Email = document.getElementById("email").value;
         let Password = document.getElementById("password").value;
 
