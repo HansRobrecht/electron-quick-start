@@ -1,0 +1,4 @@
+main #player{
+    transform: scale(2);
+    position: absolute;
+}

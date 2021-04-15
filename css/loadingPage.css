@@ -1,0 +1,16 @@
+
+#bar {
+    width: 10%;
+    height: 30px;
+    background-color: #eb0303ad;
+    text-align: center; /* To center it horizontally (if you want) */
+    line-height: 30px; /* To center it vertically */
+    color: white;
+    border-color: black;
+}
+
+#progressBar {
+    width: 100%;
+    background-color: grey;
+}  
+
