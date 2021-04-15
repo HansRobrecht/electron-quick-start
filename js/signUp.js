@@ -1,5 +1,11 @@
 "use strict";
 
+    document.getElementById("signUp").addEventListener("submit", createPost);
+
+
+    function createPost()
+    {
+        alert("hello");
         let Email = document.getElementById("email").value;
         let Password = document.getElementById("password").value;
 
@@ -18,6 +24,7 @@
         console.log("hello");
 
         sendPost(data);
+    }
 
     function sendPost(post)
     {
@@ -35,6 +42,6 @@
         .then(response => response.json())
         .then(json => console.log(json))
         .catch((err) => window.alert(err));
-        
+
         console.log("dodo");
     }
