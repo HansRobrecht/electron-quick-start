@@ -1,6 +1,9 @@
 'use strict'
 
-document.getElementById('signUp').addEventListener('click', sendPost);
+document.getElementById('signUp').addEventListener('click', (e) =>{
+    e.preventDefault();
+    sendPost()
+});
 
 function sendPost()
 {
