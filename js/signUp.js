@@ -2,21 +2,12 @@
 
 document.getElementById('signUp').addEventListener('click', (e) =>{
     e.preventDefault();
-    sendPost()
+    sendPost();
 });
 
 function sendPost()
 {
     alert('jo');
-    const express = require('express');
-    const path = require('path');
-    const mysql = require('mysql2/promise');
-    const bodyParser = require('body-parser');
-    const hbs = require('hbs');
-    const fetch = require('node-fetch');
-
-    const app = express();
-    const port = 3000;
     const config = {
         host: 'localhost',
         user:'Master',
@@ -24,22 +15,17 @@ function sendPost()
         database: 'Castle_Siege'
     };
 
-    const publicDirectory = path.join(__dirname, 'public');
-    const viewsDirectory = path.join(__dirname, 'views');
-    const partialsDirectory = path.join(__dirname, 'views/partials');
+    let email = document.getElementById('email');
+    let password = document.getElementById('password');
 
-
-    app.set('view engine', 'hbs');
-    app.set('views', viewsDirectory);
-    app.use(bodyParser.json());
-    app.use(express.static(publicDirectory));
-    hbs.registerPartials(partialsDirectory);
-    hbs.registerHelper('scoreEvaluation', function(value) {
-        return parseInt(value) < 5;
-    });
-
+    const conn = mysql.createConnection(config);
+        const query = 'INSERT INTO Users(Email, Password) VALUES (?,?)'
+        const [results] = conn.query(query, [email, password]);
+        conn.end();
+        res.json(results);
         
-    async function get() {
+        
+    /*async function get() {
         const conn = await mysql.createConnection(config);
         const [rows] = await conn.query('SELECT * FROM feedback');
         //console.log(rows);
@@ -106,6 +92,6 @@ function sendPost()
         res.json(results);
     });
 
-        
+*/        
     app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 }
