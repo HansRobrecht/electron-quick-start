@@ -6,6 +6,7 @@
 	window.addEventListener('load', function() {
 
         let hiddenWalls = new Array();
+        let captureGrounds = new Array();
 
         document.getElementById('player').style.left = 5 + 'rem';
         document.getElementById('player').style.top = 5 + 'rem';
@@ -24,11 +25,13 @@
             if(!(parseFloat(playerObject.style.left) < 0 && xValues < 0) && !(parseFloat(playerObject.style.left) > (window.outerWidth/10) && xValues > 0)){
                 if(xValues > 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left)+0.5, parseFloat(playerObject.style.top))){
+                        testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
                         playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)/2 + 'rem';
                     }
                 }
                 else if(xValues < 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left)-0.5, parseFloat(playerObject.style.top))){
+                        testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
                         playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)/2 + 'rem';
                     }
                 }
@@ -44,11 +47,13 @@
             if(!(parseFloat(playerObject.style.top) < 0 && yValues < 0) && !(parseFloat(playerObject.style.top) > (window.outerHeight/10) && yValues > 0)){
                 if(yValues > 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top)+0.5)){
+                        testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
                         playerObject.style.top = parseFloat(playerObject.style.top) + yValues/2 + 'rem';
                     }
                 }
                 else if(yValues < 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top)-0.5)){
+                        testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
                         playerObject.style.top = parseFloat(playerObject.style.top) + yValues/2 + 'rem';
                     }
                 }
@@ -82,7 +87,7 @@
                     //dmx = dmx + 0.5;
                 }
             }
-            console.table(hiddenWalls);
+            //console.table(hiddenWalls);
         };
 
         let testHiddenWall = function(xCoordinate, yCoordinate){
@@ -99,7 +104,47 @@
             return false;
         };
 
+        
+        let generateCaptureFields = function(){
+            const fields = document.querySelectorAll('.captureGround');
+            console.log(fields);
+            for(let field of fields){
+                let leftPosition = field.offsetLeft/10;
+                let topPosition = field.offsetTop/10;
+                //console.log(leftPosition);
+                //console.log(topPosition);
+                for(let dmx = 0; dmx < field.clientWidth/10; dmx++){
+                    for(let xmd = 0; xmd < field.clientHeight/10; xmd++){
+                        captureGrounds.push([(leftPosition + dmx/2),(topPosition + xmd/2)]);
+                        captureGrounds.push([(leftPosition + dmx/2),(topPosition - xmd/2)]);
+                        captureGrounds.push([(leftPosition - dmx/2),(topPosition - xmd/2)]);
+                        captureGrounds.push([(leftPosition - dmx/2),(topPosition + xmd/2)]);
+                        //console.log(`[${dmx} - ${wall.clientHeight/10}] = [${xmd} - ${wall.clientWidth/10}]`);
+                        //xmd = xmd + 0.5;
+                    }
+                    //dmx = dmx + 0.5;
+                }
+            }
+            //console.table(captureGrounds);
+        };
+
+        let testCapture = function(xCoordinate, yCoordinate, teamColor){
+            //console.log(xCoordinate + ' - ' + yCoordinate);
+            if(captureGrounds.length === 0){
+                //hiddenWalls.push([7,5], [10,21], [10,22]);
+            }
+            for(let dmx = 0; dmx < captureGrounds.length; dmx++){
+                if(captureGrounds[dmx][0] == xCoordinate && captureGrounds[dmx][1] == yCoordinate){    
+                    //console.log('Capturing');
+                    console.log(teamColor);
+                    document.getElementById('captureGround1').style.backgroundColor = (teamColor === 'blueTeam' ? 'blue' : 'red');
+                }
+            }
+        };
+
+
         generateHiddenWalls();
+        generateCaptureFields();
 
         window.onkeydown = function(pressedKey){
             switch(pressedKey.keyCode){
