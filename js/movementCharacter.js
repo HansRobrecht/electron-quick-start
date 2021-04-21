@@ -7,12 +7,30 @@
 
         let hiddenWalls = new Array();
         let captureGrounds = new Array();
+        let gameIsRunning = true;
+        let transitionTimer;
+        let colorGradientCounter = 0;
+        let transitionTimerGoing = false;
+        let playerCycle;
 
+        //TempCode to position player in topleft corner
         document.getElementById('player').style.left = 5 + 'rem';
         document.getElementById('player').style.top = 5 + 'rem';
 
-        let playerCycle;
+        let singleCall = function(){
+            generateHiddenWalls();
+            generateCaptureFields();
+            //loopingCode();
+        };
         
+        let loopingCode = async function(){
+            let counter = 0;
+            while(gameIsRunning){
+                console.log(counter++);
+                //gameIsRunning = (counter < 100);
+            }
+        }
+
         let moveCharacterHorizontally = function(xValues){
             const playerObject = document.getElementById('player');
             //console.log(playerObject.style.left + ' - ' + playerObject.style.top);
@@ -61,12 +79,15 @@
             }  
         };
 
+        //Changes characterImg based on given fileLocation
         let changeCharacterAnimation = function(gifFile){
             const playerObject = document.getElementById('player');
             playerCycle = '../img/' + gifFile;
             playerObject.src = playerCycle;
         };
 
+
+        //Generates array of coordinates based on img of the class wall
         let generateHiddenWalls = function(){
             const walls = document.querySelectorAll('.wall');
             console.log(walls);
@@ -90,6 +111,7 @@
             //console.table(hiddenWalls);
         };
 
+        //Tests whether a coordinate is lying in the hiddenWall area and returns boolean
         let testHiddenWall = function(xCoordinate, yCoordinate){
             //console.log(xCoordinate + ' - ' + yCoordinate);
             if(hiddenWalls.length === 0){
@@ -104,7 +126,7 @@
             return false;
         };
 
-        
+        //Generates array of coordinates based on div of the class captureField
         let generateCaptureFields = function(){
             const fields = document.querySelectorAll('.captureGround');
             console.log(fields);
@@ -128,6 +150,7 @@
             //console.table(captureGrounds);
         };
 
+        //Tests whether a coordinate is lying in a captureField
         let testCapture = function(xCoordinate, yCoordinate, teamColor){
             //console.log(xCoordinate + ' - ' + yCoordinate);
             if(captureGrounds.length === 0){
@@ -137,14 +160,62 @@
                 if(captureGrounds[dmx][0] == xCoordinate && captureGrounds[dmx][1] == yCoordinate){    
                     //console.log('Capturing');
                     console.log(teamColor);
-                    document.getElementById('captureGround1').style.backgroundColor = (teamColor === 'blueTeam' ? 'blue' : 'red');
+                    transitionCaptureGroundColor(teamColor, true);
+                }
+                else{
+                    transitionCaptureGroundColor(teamColor, false);
                 }
             }
+        }; 
+
+        let transitionCaptureGroundColor = function(teamColor, stillCapturing){
+            const captureGround = document.getElementById('captureGround1');
+            let lastCapture;
+            let colorGradientCounter = 0;
+            if(stillCapturing && !transitionTimerGoing){
+                transitionTimer = setInterval(transitionColor, 2000, teamColor);
+                transitionTimerGoing = true;
+            }
+            if(!stillCapturing && !(captureGround.style.backgroundColor === 'blue' || captureGround.style.backgroundColor === 'red') && captureGround.style.backgroundColor !== 'gray'){
+                console.log('resetting counter');
+                clearInterval(transitionTimer);
+                captureGround.style.backgroundColor = 'gray';
+                transitionTimerGoing = false;
+                colorGradientCounter = 0;
+            }
+            lastCapture = teamColor;
+        };
+
+        let transitionColor = function(teamColor){
+            console.log(colorGradientCounter);
+            const captureGround = document.getElementById('captureGround1');
+            let redColorTransition =  ['#CE6766', '#C92208', '#B8300B', '#AD201A', 'red'];
+            let blueColorTransition = ['#40DAF5', '#1CCDFF', '#35A7DB', '#3584E6', 'blue'];
+            console.log(redColorTransition[colorGradientCounter]);
+            if((captureGround.style.backgroundColor === 'blue' || captureGround.style.backgroundColor === 'red')){
+                clearInterval(transitionTimer);
+                colorGradientCounter = 0;
+            }
+            else{
+                if(teamColor === 'blueTeam'){
+                    console.log('changing color blue');
+                    captureGround.style.backgroundColor = blueColorTransition[colorGradientCounter];
+                }
+                else{
+                    console.log('changing color red');
+                    captureGround.style.backgroundColor = redColorTransition[colorGradientCounter];
+                }
+                colorGradientCounter++;
+            }       
         };
 
 
-        generateHiddenWalls();
-        generateCaptureFields();
+        //Single call of code to setup arrays, etc
+
+        singleCall();
+        transitionCaptureGroundColor();
+
+        //Event Handlers
 
         window.onkeydown = function(pressedKey){
             switch(pressedKey.keyCode){
