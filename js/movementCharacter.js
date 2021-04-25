@@ -12,6 +12,7 @@
         let colorGradientCounter = 0;
         let transitionTimerGoing = false;
         let playerCycle;
+        let lastCapturedGround;
 
         //TempCode to position player in topleft corner
         document.getElementById('player').style.left = 5 + 'rem';
@@ -137,10 +138,10 @@
                 //console.log(topPosition);
                 for(let dmx = 0; dmx < field.clientWidth/10; dmx++){
                     for(let xmd = 0; xmd < field.clientHeight/10; xmd++){
-                        captureGrounds.push([(leftPosition + dmx/2),(topPosition + xmd/2)]);
-                        captureGrounds.push([(leftPosition + dmx/2),(topPosition - xmd/2)]);
-                        captureGrounds.push([(leftPosition - dmx/2),(topPosition - xmd/2)]);
-                        captureGrounds.push([(leftPosition - dmx/2),(topPosition + xmd/2)]);
+                        captureGrounds.push([(leftPosition + dmx/2),(topPosition + xmd/2), field.id]);
+                        captureGrounds.push([(leftPosition + dmx/2),(topPosition - xmd/2), field.id]);
+                        captureGrounds.push([(leftPosition - dmx/2),(topPosition - xmd/2), field.id]);
+                        captureGrounds.push([(leftPosition - dmx/2),(topPosition + xmd/2), field.id]);
                         //console.log(`[${dmx} - ${wall.clientHeight/10}] = [${xmd} - ${wall.clientWidth/10}]`);
                         //xmd = xmd + 0.5;
                     }
@@ -153,27 +154,24 @@
         //Tests whether a coordinate is lying in a captureField
         let testCapture = function(xCoordinate, yCoordinate, teamColor){
             //console.log(xCoordinate + ' - ' + yCoordinate);
-            if(captureGrounds.length === 0){
-                //hiddenWalls.push([7,5], [10,21], [10,22]);
-            }
             for(let dmx = 0; dmx < captureGrounds.length; dmx++){
                 if(captureGrounds[dmx][0] == xCoordinate && captureGrounds[dmx][1] == yCoordinate){    
-                    //console.log('Capturing');
-                    console.log(teamColor);
-                    transitionCaptureGroundColor(teamColor, true);
+                    console.log('Capturing');
+                    transitionCaptureGroundColor(teamColor, true, captureGrounds[dmx][2]);
+                    break;
                 }
                 else{
-                    transitionCaptureGroundColor(teamColor, false);
+                    transitionCaptureGroundColor(teamColor, false, captureGrounds[dmx][2]);
                 }
             }
         }; 
 
-        let transitionCaptureGroundColor = function(teamColor, stillCapturing){
-            const captureGround = document.getElementById('captureGround1');
+        let transitionCaptureGroundColor = function(teamColor, stillCapturing, specificCaptureGround){
+            const captureGround = document.getElementById(specificCaptureGround);
             let lastCapture;
-            let colorGradientCounter = 0;
+            let colorGradientCounter = 0;   
             if(stillCapturing && !transitionTimerGoing){
-                transitionTimer = setInterval(transitionColor, 2000, teamColor);
+                transitionTimer = setInterval(transitionColor, 2000, teamColor, captureGround);
                 transitionTimerGoing = true;
             }
             if(!stillCapturing && !(captureGround.style.backgroundColor === 'blue' || captureGround.style.backgroundColor === 'red') && captureGround.style.backgroundColor !== 'gray'){
@@ -186,24 +184,23 @@
             lastCapture = teamColor;
         };
 
-        let transitionColor = function(teamColor){
-            console.log(colorGradientCounter);
-            const captureGround = document.getElementById('captureGround1');
+        let transitionColor = function(teamColor, specificCaptureGround){
+            //console.log(colorGradientCounter);
             let redColorTransition =  ['#CE6766', '#C92208', '#B8300B', '#AD201A', 'red'];
             let blueColorTransition = ['#40DAF5', '#1CCDFF', '#35A7DB', '#3584E6', 'blue'];
-            console.log(redColorTransition[colorGradientCounter]);
-            if((captureGround.style.backgroundColor === 'blue' || captureGround.style.backgroundColor === 'red')){
+            //console.log(redColorTransition[colorGradientCounter]);
+            if((specificCaptureGround.style.backgroundColor === 'blue' || specificCaptureGround.style.backgroundColor === 'red')){
                 clearInterval(transitionTimer);
                 colorGradientCounter = 0;
             }
             else{
                 if(teamColor === 'blueTeam'){
-                    console.log('changing color blue');
-                    captureGround.style.backgroundColor = blueColorTransition[colorGradientCounter];
+                    //console.log('changing color blue');
+                    specificCaptureGround.style.backgroundColor = blueColorTransition[colorGradientCounter];
                 }
                 else{
-                    console.log('changing color red');
-                    captureGround.style.backgroundColor = redColorTransition[colorGradientCounter];
+                    //console.log('changing color red');
+                    specificCaptureGround.style.backgroundColor = redColorTransition[colorGradientCounter];
                 }
                 colorGradientCounter++;
             }       
@@ -213,7 +210,6 @@
         //Single call of code to setup arrays, etc
 
         singleCall();
-        transitionCaptureGroundColor();
 
         //Event Handlers
 

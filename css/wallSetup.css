@@ -2,6 +2,9 @@
     position: absolute; 
     padding: 0rem;
     background-color: gray;
+    width: 10rem;
+    height: 10rem;
+    z-index: -1;
 }
 
 .wall{
@@ -22,7 +25,9 @@
 #captureGround1{
     top: 50rem;
     left: 50rem;
-    width: 10rem;
-    height: 10rem;
-    z-index: -1;
+}
+
+#captureGround2{
+    top: 75rem;
+    left: 75rem;
 }
