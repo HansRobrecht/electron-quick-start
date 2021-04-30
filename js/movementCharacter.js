@@ -7,12 +7,17 @@
 
         let hiddenWalls = new Array();
         let captureGrounds = new Array();
-        let gameIsRunning = true;
-        let transitionTimer;
-        let colorGradientCounter = 0;
-        let transitionTimerGoing = false;
         let playerCycle;
-        let lastCapturedGround;
+
+        let defaultCaptureGroundColor ='gray';
+        let [lastSolidOne, lastSolidTwo] = [defaultCaptureGroundColor, defaultCaptureGroundColor];
+        let lastCaptureAttempt;
+        let transitionTimerOne;
+        let transitionTimerTwo;
+        let transitionCounterOne = 0;
+        let transitionCounterTwo = 0;
+        let timerGoingOne = false;
+        let timerGoingTwo = false;
 
         //TempCode to position player in topleft corner
         document.getElementById('player').style.left = 5 + 'rem';
@@ -23,14 +28,6 @@
             generateCaptureFields();
             //loopingCode();
         };
-        
-        let loopingCode = async function(){
-            let counter = 0;
-            while(gameIsRunning){
-                console.log(counter++);
-                //gameIsRunning = (counter < 100);
-            }
-        }
 
         let moveCharacterHorizontally = function(xValues){
             const playerObject = document.getElementById('player');
@@ -132,6 +129,7 @@
             const fields = document.querySelectorAll('.captureGround');
             console.log(fields);
             for(let field of fields){
+                field.style.backgroundColor = 'gray';
                 let leftPosition = field.offsetLeft/10;
                 let topPosition = field.offsetTop/10;
                 //console.log(leftPosition);
@@ -153,57 +151,104 @@
 
         //Tests whether a coordinate is lying in a captureField
         let testCapture = function(xCoordinate, yCoordinate, teamColor){
-            //console.log(xCoordinate + ' - ' + yCoordinate);
+            let gotMatch = false;
             for(let dmx = 0; dmx < captureGrounds.length; dmx++){
-                if(captureGrounds[dmx][0] == xCoordinate && captureGrounds[dmx][1] == yCoordinate){    
-                    console.log('Capturing');
-                    transitionCaptureGroundColor(teamColor, true, captureGrounds[dmx][2]);
+                if(captureGrounds[dmx][0] == xCoordinate && captureGrounds[dmx][1] === yCoordinate){
+                    checkCaptureGroundColor(teamColor, captureGrounds[dmx][2]);
+                    gotMatch = true;
+                    lastCaptureAttempt = captureGrounds[dmx][2];
                     break;
                 }
-                else{
-                    transitionCaptureGroundColor(teamColor, false, captureGrounds[dmx][2]);
+            }
+            if(!gotMatch){
+                //Prevents activation in case there wasn't an attempt to capture a ground yet
+                if(lastCaptureAttempt !== undefined){
+                    controlCaptureGround(lastCaptureAttempt);
                 }
             }
         }; 
 
-        let transitionCaptureGroundColor = function(teamColor, stillCapturing, specificCaptureGround){
-            const captureGround = document.getElementById(specificCaptureGround);
-            let lastCapture;
-            let colorGradientCounter = 0;   
-            if(stillCapturing && !transitionTimerGoing){
-                transitionTimer = setInterval(transitionColor, 2000, teamColor, captureGround);
-                transitionTimerGoing = true;
+        let controlCaptureGround = function(captureGroundId){
+
+            let captureGroundColor = document.getElementById(captureGroundId).style.background;
+
+            //In case false -> Ground was completely captured, nothing should be done while exiting
+            //In case true -> Ground wasn't completely captured 
+            if(!(captureGroundColor === 'blue' || captureGroundColor === 'red')){
+                //CaptureGroundColor should return to last solid color => Either red/blue if those claimed it last or gray when never claimed
+                //Counter should be reset so colorTransitions are working
+                switch(captureGroundId){
+                    case 'captureGround1': clearInterval(transitionTimerOne); timerGoingOne = false; transitionCounterOne = 0; document.getElementById(captureGroundId).style.background = lastSolidOne; break;
+                    case 'captureGround2' : clearInterval(transitionTimerTwo); timerGoingTwo = false; transitionCounterTwo = 0; document.getElementById(captureGroundId).style.background = lastSolidTwo;break;
+                }
             }
-            if(!stillCapturing && !(captureGround.style.backgroundColor === 'blue' || captureGround.style.backgroundColor === 'red') && captureGround.style.backgroundColor !== 'gray'){
-                console.log('resetting counter');
-                clearInterval(transitionTimer);
-                captureGround.style.backgroundColor = 'gray';
-                transitionTimerGoing = false;
-                colorGradientCounter = 0;
-            }
-            lastCapture = teamColor;
         };
 
-        let transitionColor = function(teamColor, specificCaptureGround){
-            //console.log(colorGradientCounter);
+        //Checks whether captureGround isn't getting captured yet -> Color should be gray
+        //Then extra check for solidColor (red || blue) and opposite to teamColor that entered, yes : activate capturing mechanic
+        let checkCaptureGroundColor = function(teamColor, captureGroundId){
+
+            const captureGround = document.getElementById(captureGroundId);
+            let allowCapturing = false;
+
+            //First Check whether one field is already being captured
+            if((captureGroundId === 'captureGround1' && !timerGoingOne) || (captureGroundId === 'captureGround2' && !timerGoingTwo)){
+                //True -> Start capturing
+                if(captureGround.style.backgroundColor === 'gray'){
+                    allowCapturing = true;
+                }
+                //If ground already captured, additional check to see whether entering team is opposite to the last team that captured the ground
+                else if((captureGround.style.backgroundColor === 'blue' && teamColor === 'teamRed') || (captureGround.style.backgroundColor === 'red' && teamColor === 'teamBlue')){
+                    allowCapturing = true;
+                }    
+            }   
+            
+            if(allowCapturing){
+                switch(captureGroundId){
+                    case 'captureGround1': transitionTimerOne = setInterval(captureGroundTransitionColor, 2000, teamColor, captureGroundId); timerGoingOne = true; break;
+                    case 'captureGround2' : transitionTimerTwo =  setInterval(captureGroundTransitionColor, 2000, teamColor, captureGroundId); timerGoingTwo = true; break;
+                }
+            }
+        };
+
+        let captureGroundTransitionColor = function(teamColor, captureGroundId){
+
             let redColorTransition =  ['#CE6766', '#C92208', '#B8300B', '#AD201A', 'red'];
             let blueColorTransition = ['#40DAF5', '#1CCDFF', '#35A7DB', '#3584E6', 'blue'];
-            //console.log(redColorTransition[colorGradientCounter]);
-            if((specificCaptureGround.style.backgroundColor === 'blue' || specificCaptureGround.style.backgroundColor === 'red')){
-                clearInterval(transitionTimer);
-                colorGradientCounter = 0;
+            let timerGoing;
+            
+            //Addtional check for still capturing if for some reason interval occurs again after leaving ground
+            switch(captureGroundId){
+                case 'captureGround1': timerGoing = timerGoingOne; break;
+                case 'captureGround2': timerGoing = timerGoingTwo; break;
+            }
+
+            console.log('switching colors');
+
+            //Internal control of the timer, will stop loop if ground completely captured
+            if((document.getElementById(captureGroundId).style.backgroundColor === 'blue' && teamColor === 'teamBlue') || (document.getElementById(captureGroundId).style.backgroundColor === 'red' && teamColor === 'teamRed')){
+                switch(captureGroundId){
+                    case 'captureGround1': clearInterval(transitionTimerOne); timerGoingOne = false; lastSolidOne = teamColor.substring(4);break;
+                    case 'captureGround2' : clearInterval(transitionTimerTwo); timerGoingTwo = false; lastSolidTwo = teamColor.substring(4); break;
+                }
             }
             else{
-                if(teamColor === 'blueTeam'){
-                    //console.log('changing color blue');
-                    specificCaptureGround.style.backgroundColor = blueColorTransition[colorGradientCounter];
-                }
-                else{
-                    //console.log('changing color red');
-                    specificCaptureGround.style.backgroundColor = redColorTransition[colorGradientCounter];
-                }
-                colorGradientCounter++;
-            }       
+                //Use of previously set copy of timers in case of unintentional activation
+                if(timerGoing){
+                    if(teamColor === 'teamBlue'){
+                        switch(captureGroundId){
+                            case 'captureGround1': document.getElementById(captureGroundId).style.background = blueColorTransition[transitionCounterOne]; transitionCounterOne++; break;
+                            case 'captureGround2' : document.getElementById(captureGroundId).style.background = blueColorTransition[transitionCounterTwo]; transitionCounterTwo++; break;
+                        }
+                    }
+                    else{
+                        switch(captureGroundId){
+                            case 'captureGround1': document.getElementById(captureGroundId).style.background = redColorTransition[transitionCounterOne]; transitionCounterOne++; break;
+                            case 'captureGround2' : document.getElementById(captureGroundId).style.background = redColorTransition[transitionCounterTwo]; transitionCounterTwo++; break;
+                        }
+                    }
+                }  
+            }
         };
 
 
