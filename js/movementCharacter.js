@@ -5,19 +5,6 @@
 
 	window.addEventListener('load', function() {
 
-        const retrieveUser = function(username, password){
-            console.log('retrieving records');
-            fetch(`https://api.airtable.com/v0/appDrBaXHOZT2UEKQ/Gebruikers?filterByFormula={User}="${username}"`, {
-                headers:{
-					'Authorization' : 'Bearer keyj9zMtJACYaD2uv'
-				}
-            })
-            .then(response => response.json())
-            .then(json =>  console.log(json));
-        }
-
-        retrieveUser('Master', 'Azerty123');
-
         let hiddenWalls = new Array();
         let captureGrounds = new Array();
         let playerCycle;
