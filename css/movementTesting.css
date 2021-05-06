@@ -2,3 +2,10 @@ main #player{
     transform: scale(2);
     position: absolute;
 }
+body {
+    background-color: black;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}

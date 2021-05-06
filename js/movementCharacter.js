@@ -1,6 +1,9 @@
 
 
 ;(function() {
+
+// HET IS MOGELIJK OM VIA RECHTS EN ONDER BUITEN SCHERM TE LOPEN
+
 	'use strict';
 
 	window.addEventListener('load', function() {
@@ -115,4 +118,109 @@
         }
 
 	});
+})();
+
+
+//PROJECTILES
+
+(function() {
+			
+    "use strict";
+    
+    var canvasWidth = body.width;
+    var canvasHeight = body.height;
+    var canvas = null;
+    var bounds = null;
+    var mouseX = 0.0;
+    var mouseY = 0.0;
+    
+    var player = {
+        x: (canvasWidth * 0.5) | 0,
+        y: (canvasHeight * 0.5) | 0,
+        dx: 0.0,
+        dy: 0.0,
+        angle: 0.0,
+        radius: 17.5,
+        
+        tick: function() {
+            this.angle = Math.atan2(mouseY - this.y,mouseX - this.x);
+        },
+    };
+    
+    var bullet = {
+        x: (canvasWidth * 0.5) | 0,
+        y: (canvasHeight * 0.5) | 0,
+        dx: 0.0,
+        dy: 0.0,
+        radius: 5.0,
+        
+        tick: function() {
+            this.x += this.dx;
+            this.y += this.dy;
+            
+            if (this.x + this.radius < 0.0
+            ||	this.x - this.radius > canvasWidth
+            ||	this.y + this.radius < 0.0
+            || 	this.y - this.radius > canvasHeight)
+            {
+                this.dx = 0.0;
+                this.dy = 0.0;
+            }
+        },
+    };
+    
+    function loop() {
+        // Tick
+        bullet.tick();
+        player.tick();
+        bullet.render();
+        //
+        requestAnimationFrame(loop);
+    }
+    
+
+
+    let changeCharacterAnimation = function(gifFile){
+        const playerObject = document.getElementById('player');
+        playerCycle = '../img/' + gifFile;
+        playerObject.src = playerCycle;
+    };
+
+
+
+    window.onmousedown = function(e) {
+        // The mouse pos - the player pos gives a vector
+        // that points from the player toward the mouse
+        var x = mouseX - player.x;
+        var y = mouseY - player.y;
+        
+        // Using pythagoras' theorm to find the distance (the length of the vector)
+        var l = Math.sqrt(x * x + y * y);
+        
+        // Dividing by the distance gives a normalized vector whose length is 1
+        x = x / l;
+        y = y / l;
+        
+        // Reset bullet position
+        bullet.x = player.x;
+        bullet.y = player.y;
+        
+        // Get the bullet to travel towards the mouse pos with a new speed of 10.0 (you can change this)
+        bullet.dx = x * 10.0;
+        bullet.dy = y * 10.0;
+    }
+    
+    window.onmousemove = function(e) {
+        mouseX = e.clientX - bounds.left;
+        mouseY = e.clientY - bounds.top;
+    }
+    
+    window.onload = function() {
+        canvas = document.getElementById("canvas");
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        bounds = canvas.getBoundingClientRect();
+        loop();
+    }
+
 })();
