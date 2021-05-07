@@ -21,11 +21,20 @@
 
     <main>
       <form>
-        <label for="email">Email</label>
-        <input placeholder = "email" type="text" id = "email">
-        <label for="password">Password</label>
-        <input placeholder = "password" type="password" id = "password">
-  
+        <div>
+          <label for="email">Email</label>
+          <div>
+            <input placeholder = "email" type="text" id = "email">
+            <p class="errorLabel" id="errorEmail">Temp</p>
+          </div>
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <div>
+            <input placeholder = "password" type="password" id = "password">
+            <p class="errorLabel" id="errorPassword">Temp</p>
+          </div> 
+        </div>
         <div class="buttons">
           <button id = "login" type = "submit">Login</button>
           <button id = "sign up" type = "submit">Sign up</button>

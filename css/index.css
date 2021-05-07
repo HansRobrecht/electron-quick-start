@@ -30,6 +30,17 @@ main form{
     opacity: 50%;
 }
 
+main form div div{
+    display: flex;
+}
+
+main form div div .errorLabel{
+    font-size: 1.5rem;
+    color: red;
+    display: none;
+    margin: 0rem;
+}
+
 main form label{
     display: inline-block;
 }
