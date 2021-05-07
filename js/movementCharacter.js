@@ -7,6 +7,7 @@
 	'use strict';
 
 	window.addEventListener('load', function() {
+        
 
         let hiddenWalls = new Array();
         let captureGrounds = new Array();
@@ -277,6 +278,7 @@
 	});
 })();
 
+/*
 
 //PROJECTILES
 
@@ -380,4 +382,6 @@
         loop();
     }
 
+
 })();
+*/

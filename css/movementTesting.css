@@ -2,6 +2,8 @@ main #player{
     transform: scale(2);
     position: absolute;
 }
+
+/*
 body {
     background-color: black;
     margin: 0;
@@ -9,3 +11,4 @@ body {
     width: 100%;
     overflow: hidden;
 }
+*/
