@@ -6,60 +6,15 @@
     
         window.addEventListener('load', function() {
 
-            const validateForm = function(){
-                //Need to remove last part and make it's own if-statement for better error message to user
-                return (document.getElementById('email').value !== '' && document.getElementById('password').value !== '' && validateMail(document.getElementById('email').value.toLowerCase()));
+            class Profile {
+                constructor(username, winLossRate){
+                    this.username = username;
+                    this.winLossRate = winLossRate;
+                }
             };
 
-            const lookupProfile = function(specificButton){
-                if(validateForm()){
-                    const email = document.getElementById('email').value.toLowerCase();
-                    let record;
-                    console.log(email);
-                    fetch(`https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles?filterByFormula={Email}="${email}"`, {
-                        headers:{
-                            'Authorization' : 'Bearer keyj9zMtJACYaD2uv'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(json => specificButton === 'login' ? validatePassword(json) : createNewProfile(json))
-                }
-                else{
-                    console.log('Please fill all inputfields in');
-                }
-            }
-
-            const createNewProfile = function(record){
-                if(record.records !== undefined && record.records.length === 0){
-                    if(validateMail(document.getElementById('email').value.toLowerCase())){
-                        fetch('https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles', {
-                            method: 'POST',
-                            headers:{
-                                'Authorization' : 'Bearer keyj9zMtJACYaD2uv',
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                "records": [{
-                                    "fields": {
-                                        "Email": document.getElementById('email').value.toLowerCase(),
-                                        "Password": document.getElementById('password').value,
-                                    }
-                                }]  
-                            })
-                        })
-                    }
-                    else{
-                        const error = document.getElementById('errorEmail');
-                        error.style.display = 'inline';
-                        error.innerHTML = 'This isn\'t a valid mail';
-                    }
-                    
-                }
-                else{
-                    const error = document.getElementById('errorEmail');
-                    error.style.display = 'inline';
-                    error.innerHTML = 'This account already exists';
-                }
+            const validateForm = function(){
+                return (document.getElementById('email').value !== '' && document.getElementById('password').value !== '');
             };
 
             const validateMail = function(mail){
@@ -72,9 +27,9 @@
             const validatePassword = function(record){
                 if(record.records.length !== 0){
                     const password = document.getElementById('password').value;
-                    console.log(password + ' - ' + record.records[0].fields.Password);
+                    //console.log(password + ' - ' + record.records[0].fields.Password);
                     if(password === record.records[0].fields.Password){
-                        console.log('You\'re in');
+                        processProfile(record);
                     }
                     else{
                         const error = document.getElementById('errorPassword');
@@ -88,6 +43,71 @@
                     error.innerHTML = 'This account doesn\'t exist';
                 }
             };
+
+            const lookupProfile = function(specificButton){
+                if(validateMail(document.getElementById('email').value.toLowerCase())){
+                    if(validateForm()){
+                        const email = document.getElementById('email').value.toLowerCase();
+                        let record;
+                        //console.log(email);
+                        fetch(`https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles?filterByFormula={Email}="${email}"`, {
+                            headers:{
+                                'Authorization' : 'Bearer keyj9zMtJACYaD2uv'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(json => specificButton === 'login' ? validatePassword(json) : createNewProfile(json))
+                    }
+                    else{
+                        console.log('Please fill all inputfields in');
+                    }
+                }
+                else{
+                    const error = document.getElementById('errorEmail');
+                    error.style.display = 'inline';
+                    error.innerHTML = 'This isn\'t a valid mail';
+                }
+                
+            }
+
+            const createNewProfile = function(record){
+                if(record.records !== undefined && record.records.length === 0){
+                    fetch('https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles', {
+                            method: 'POST',
+                            headers:{
+                                'Authorization' : 'Bearer keyj9zMtJACYaD2uv',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                "records": [{
+                                    "fields": {
+                                        "Email": document.getElementById('email').value.toLowerCase(),
+                                        "Password": document.getElementById('password').value,
+                                        "Username": 'Guest',
+                                        "Wins": 0,
+                                        "Losses": 0
+                                    }
+                                }]  
+                            })
+                        })
+                        .then(record => record.json())
+                        .then(json => processProfile(json))
+                }
+                else{
+                    const error = document.getElementById('errorEmail');
+                    error.style.display = 'inline';
+                    error.innerHTML = 'This account already exists';
+                }
+            };
+
+            const processProfile = function(record){
+                const data = record.records[0].fields;
+                let profile = new Profile(data.Username, `${data.Wins}-${data.Losses}`);
+                window.sessionStorage.setItem('loggedUser', JSON.stringify(profile));
+                console.log(profile);
+                console.log(window.sessionStorage.getItem('loggedUser').split(','));
+                window.location.href = 'mainMenu.html';
+            }
         
             document.getElementById('login').addEventListener('click', (e) => {
                 e.preventDefault();
