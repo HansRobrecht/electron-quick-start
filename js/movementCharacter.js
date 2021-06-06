@@ -23,6 +23,8 @@
         let timerGoingOne = false;
         let timerGoingTwo = false;
 
+        let projectileCreationTimer;
+
         //TempCode to position player in topleft corner
         document.getElementById('player').style.left = 5 + 'rem';
         document.getElementById('player').style.top = 5 + 'rem';
@@ -275,6 +277,71 @@
             changeCharacterAnimation('Idle_Cycle.gif')
         }
 
+
+        function random(min,max){
+            return Math.round(Math.random() * (max-min) + min);
+        }
+
+        function createProjectile(){
+            const offset = random(0, (window.outerWidth - 100)/10);
+            const projectileSpeed = random(10, 100);
+            const length = random(10, 100);
+            const width = random(10, 50);
+
+            const newProjectile = document.createElement('div');
+            newProjectile.classList.add('down');
+            newProjectile.classList.add('projectile');
+            newProjectile.style.width = width/10 + 'rem';
+            newProjectile.style.height = length/10 + 'rem';
+            newProjectile.style.zIndex = -1;
+            newProjectile.setAttribute('projectileSpeed', projectileSpeed);
+            newProjectile.style.left = offset + 'rem';
+            newProjectile.style.top = '1rem';
+
+            
+            document.querySelector('main').appendChild(newProjectile);
+        };
+
+        function shootProjectiles(){
+            const main = document.querySelector('main');
+            const allProjectiles = document.querySelectorAll('.projectile');
+            for(let projectile of allProjectiles){
+                projectile.style.top = parseInt(projectile.style.top) + parseInt(projectile.getAttribute('projectileSpeed')/10) + 'rem';
+                if(parseInt(projectile.style.top) > (window.outerHeight/10 - 10)){
+                    main.removeChild(projectile);
+                }
+            }
+
+        };
+
+        projectileCreationTimer = setInterval(createProjectile, 250)
+        const projectileShot = setInterval(shootProjectiles, 50)
+/*
+        function dropBox(){
+            var length = random(100, (window.outerWidth - 100));
+            var velocity = random(850, 10000);
+            var size = random(50, 150);
+            var thisBox = document.createElement('div');
+            thisBox.classList.add('box');
+            thisBox.setAttribute('width', size + 'px');
+            thisBox.setAttribute('height', size + 'px');
+            thisBox.setAttribute('left', length + 'px');
+            thisBox.setAttribute('transition',  'transform ' + velocity + 'ms lineair');
+            
+            thisBox.setAttribute("test", Math.round(Math.random()));
+            if(thisBox.getAttribute("test")){
+                thisBox.setAttribute("background-image", "url('http://icons.iconarchive.com/icons/hopstarter/halloween-avatars/128/Frankenstein-icon.png')");
+                thisBox.setAttribute('background-size', 'contain');
+            } else {
+                    thisBox.setAttribute("background-image", "url('http://icons.iconarchive.com/icons/hopstarter/halloween-avatars/128/Scream-icon.png')");
+                thisBox.setAttribute('background-size', 'contain');
+            }
+
+            document.querySelector('main').appendChild(thisBox);
+        };
+        
+        dropBox();
+*/
 	});
 })();
 

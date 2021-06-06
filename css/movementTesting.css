@@ -1,5 +1,15 @@
+main{
+    overflow: hidden;
+}
+
 main #player{
     transform: scale(2);
+    position: absolute;
+}
+
+.projectile{
+    background-color: purple;
+    display: inline-block;
     position: absolute;
 }
 
