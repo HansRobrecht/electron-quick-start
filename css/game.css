@@ -1,0 +1,27 @@
+
+/*
+    CSS for basic playersettings
+*/
+main #player{
+    transform: scale(2);
+    position: absolute;
+    z-index: 2;
+    width: 5rem;
+}
+
+
+main .playground .down{
+    background-color: purple;
+}
+
+main .playground .up{
+    background-color: cyan;
+}
+
+main .playground .left{
+    background-color: yellow;
+}
+
+main .playground .right{
+    background-color: red;
+}

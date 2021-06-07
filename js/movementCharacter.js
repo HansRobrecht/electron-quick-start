@@ -346,18 +346,8 @@
             document.querySelector('p').innerText = parseInt(document.querySelector('p').innerText) + 1;
         }
 
-        const options = {
-            root: document.querySelector('#player'),
-            rootMargin: '0px',
-            threshold: 1
-        };
-
-        let observer = new IntersectionObserver(increaseScore, options);
-        //const target = document.querySelectorAll('.projectile');
-        //observer.observe(target);
-
-        projectileCreationTimer = setInterval(createProjectile, 250)
-        const projectileShot = setInterval(shootProjectiles, 250)
+        //projectileCreationTimer = setInterval(createProjectile, 250)
+        //const projectileShot = setInterval(shootProjectiles, 250)
 
         
 
