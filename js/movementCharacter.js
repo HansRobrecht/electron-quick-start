@@ -26,8 +26,10 @@
         let projectileCreationTimer;
 
         //TempCode to position player in topleft corner
-        document.getElementById('player').style.left = 5 + 'rem';
-        document.getElementById('player').style.top = 5 + 'rem';
+        document.getElementById('player').style.left = 50 + 'px';
+        document.getElementById('player').style.top = 50 + 'px';
+        document.getElementById('player').style.width = 50 + 'px';
+        document.getElementById('player').style.height = 35 + 'px';
 
         let singleCall = function(){
             generateHiddenWalls();
@@ -44,17 +46,17 @@
             else if(xValues > 0 && playerCycle !== '../img/Running_Cycle.gif'){
                 changeCharacterAnimation('Running_Cycle.gif');
             }
-            if(!(parseFloat(playerObject.style.left) < 0 && xValues < 0) && !(parseFloat(playerObject.style.left) > (window.outerWidth/10) && xValues > 0)){
+            if(!(parseFloat(playerObject.style.left) < 0 && xValues < 0) && !(parseFloat(playerObject.style.left) > (window.outerWidth) && xValues > 0)){
                 if(xValues > 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left)+0.5, parseFloat(playerObject.style.top))){
                         testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
-                        playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)/2 + 'rem';
+                        playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)*5 + 'px';
                     }
                 }
                 else if(xValues < 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left)-0.5, parseFloat(playerObject.style.top))){
                         testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
-                        playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)/2 + 'rem';
+                        playerObject.style.left = parseFloat(playerObject.style.left) + parseFloat(xValues)*5 + 'px';
                     }
                 }
             }  
@@ -66,17 +68,17 @@
             if(playerCycle !== '../img/Running_Cycle.gif'){
                 changeCharacterAnimation('Running_Cycle.gif');
             }
-            if(!(parseFloat(playerObject.style.top) < 0 && yValues < 0) && !(parseFloat(playerObject.style.top) > (window.outerHeight/10) && yValues > 0)){
+            if(!(parseFloat(playerObject.style.top) < 0 && yValues < 0) && !(parseFloat(playerObject.style.top) > (window.outerHeight) && yValues > 0)){
                 if(yValues > 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top)+0.5)){
                         testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
-                        playerObject.style.top = parseFloat(playerObject.style.top) + yValues/2 + 'rem';
+                        playerObject.style.top = parseFloat(playerObject.style.top) + yValues*5 + 'px';
                     }
                 }
                 else if(yValues < 0){
                     if(!testHiddenWall(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top)-0.5)){
                         testCapture(parseFloat(playerObject.style.left), parseFloat(playerObject.style.top), playerObject.classList.value);
-                        playerObject.style.top = parseFloat(playerObject.style.top) + yValues/2 + 'rem';
+                        playerObject.style.top = parseFloat(playerObject.style.top) + yValues*5 + 'px';
                     }
                 }
                 
@@ -283,7 +285,7 @@
         }
 
         function createProjectile(){
-            const offset = random(0, (window.outerWidth - 100)/10);
+            const offset = random(0, (window.outerWidth - 100));
             const projectileSpeed = random(10, 100);
             const length = random(10, 100);
             const width = random(10, 50);
@@ -291,31 +293,74 @@
             const newProjectile = document.createElement('div');
             newProjectile.classList.add('down');
             newProjectile.classList.add('projectile');
-            newProjectile.style.width = width/10 + 'rem';
-            newProjectile.style.height = length/10 + 'rem';
-            newProjectile.style.zIndex = -1;
+            newProjectile.style.width = width + 'px';
+            newProjectile.style.height = length + 'px';
             newProjectile.setAttribute('projectileSpeed', projectileSpeed);
-            newProjectile.style.left = offset + 'rem';
-            newProjectile.style.top = '1rem';
+            newProjectile.style.left = offset + 'px';
+            newProjectile.style.top = '1px';
 
             
-            document.querySelector('main').appendChild(newProjectile);
+            document.querySelector('.playground').appendChild(newProjectile);
+            //observer.observe(newProjectile);
+            //clearInterval(projectileCreationTimer);
         };
 
         function shootProjectiles(){
-            const main = document.querySelector('main');
+            const playground = document.querySelector('.playground');
             const allProjectiles = document.querySelectorAll('.projectile');
             for(let projectile of allProjectiles){
                 projectile.style.top = parseInt(projectile.style.top) + parseInt(projectile.getAttribute('projectileSpeed')/10) + 'rem';
                 if(parseInt(projectile.style.top) > (window.outerHeight/10 - 10)){
-                    main.removeChild(projectile);
+                    playground.removeChild(projectile);
+                }
+                if(detectCollision(projectile, document.getElementById('player'))){
+                    projectile.style.backgroundColor = 'green';
+                    increaseScore();
                 }
             }
 
         };
 
+        function detectCollision(hitbox, target){
+            let targetLeft = parseFloat(target.style.left);
+            let targetWidth = parseFloat(target.style.width);
+            let targetTop = parseFloat(target.style.top);
+            let targetHeight = parseFloat(target.style.height);
+
+            let hitboxLeft = parseFloat(hitbox.style.left);
+            let hitboxWidth = parseFloat(hitbox.style.width);
+            let hitboxTop = parseFloat(hitbox.style.top);
+            let hitboxHeight = parseFloat(target.style.height);
+
+            //console.log(playerLeft, playerWidth, playerTop, playerHeight);
+
+            return (
+                targetLeft < hitboxLeft + hitboxWidth && 
+                targetLeft + targetWidth > hitboxLeft &&
+                targetTop < hitboxTop + hitboxHeight &&
+                targetTop + targetHeight > hitboxTop
+                )
+        }
+
+        function increaseScore(){
+            document.querySelector('p').innerText = parseInt(document.querySelector('p').innerText) + 1;
+        }
+
+        const options = {
+            root: document.querySelector('#player'),
+            rootMargin: '0px',
+            threshold: 1
+        };
+
+        let observer = new IntersectionObserver(increaseScore, options);
+        //const target = document.querySelectorAll('.projectile');
+        //observer.observe(target);
+
         projectileCreationTimer = setInterval(createProjectile, 250)
-        const projectileShot = setInterval(shootProjectiles, 50)
+        const projectileShot = setInterval(shootProjectiles, 250)
+
+        
+
 /*
         function dropBox(){
             var length = random(100, (window.outerWidth - 100));

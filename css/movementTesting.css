@@ -1,16 +1,33 @@
-main{
-    overflow: hidden;
+html{
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.score{
+    position: absolute;
+    left:0rem;
+    top: 0rem;
+    font-size: 10rem;
+}
+
+#test{
+    width: 100vw;
+    height: 100vh;
+    border: solid 5px green;
 }
 
 main #player{
     transform: scale(2);
     position: absolute;
+    z-index: 2;
+    width: 5rem;
 }
 
 .projectile{
     background-color: purple;
     display: inline-block;
     position: absolute;
+    z-index: 1;
 }
 
 /*
