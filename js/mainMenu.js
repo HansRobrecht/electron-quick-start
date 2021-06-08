@@ -6,8 +6,6 @@
 
     window.addEventListener('load', function() {
 
-        let temp = JSON.parse(window.sessionStorage.getItem('loggedUser'));
-        console.log(temp);
-
+        let profile = JSON.parse(window.sessionStorage.getItem('loggedUser'));
     });
 })();

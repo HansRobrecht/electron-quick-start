@@ -6,7 +6,8 @@
 
         //Assignments of variables used globally
 
-        let user = JSON.parse(window.sessionStorage.getItem('loggedUser'));
+        let profile = JSON.parse(window.sessionStorage.getItem('loggedUser'));
+        console.log(profile);
 
         const player = document.getElementById('player');
         const modal = document.getElementById("myModal");
@@ -51,6 +52,7 @@
             capturingZone = false;         
 
             createCapturezone(3);
+            updateLifeCounter();
             document.querySelector('.score').innerText = 0;
             modal.style.display = 'none';
             modal.querySelector('h2').innerText = 'Game is pauzed';
@@ -221,6 +223,15 @@
         //Reduces lives and hides a heart
         const reduceLives = function(){
             lives = lives - 1;
+            updateLifeCounter();
+
+            for(let heart of document.querySelectorAll('.heart')){
+                if(heart.style.display !== 'none'){
+                    heart.style.display = 'none';
+                    break;
+                }
+            }
+            
             if(lives <= 0){
                 endGame();
             }
@@ -230,6 +241,12 @@
         const removeProjectile = function(projectile){
             const playground = document.querySelector('.playground');
             playground.removeChild(projectile);
+        };
+
+        //Updates lifecounter gamemenu
+        const updateLifeCounter = function(){
+            const lifeCounter = document.querySelector('.lives');
+            lifeCounter.innerText = lives;
         };
 
 
@@ -354,8 +371,10 @@
 
         //Increases score based on scoreModifier
         const increaseScore = function(){
-            const scorefield = document.querySelector('.score');
-            scorefield.innerText = parseInt(scorefield.innerText) + scoreModifier * 1;
+            const scorefields = document.querySelectorAll('.score');
+            for(let scorefield of scorefields){
+                scorefield.innerText = parseInt(scorefield.innerText) + scoreModifier * 1;
+            }
         }
 
 

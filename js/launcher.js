@@ -7,8 +7,8 @@
         window.addEventListener('load', function() {
 
             class Profile {
-                constructor(index, email, password, username, totalGames, maxScore, avgScore){
-                    this.index = index;
+                constructor(id, email, password, username, totalGames, maxScore, avgScore){
+                    this.id = id;
                     this.email = email;
                     this.password = password;
                     this.username = username;
@@ -108,7 +108,7 @@
 
             const processProfile = function(record){
                 const data = record.records[0].fields;
-                let profile = new Profile(record.records[0].index, data.Email, data.Password, data.Username, data.TotalGames, data.MaxScore, data.AverageScore);
+                let profile = new Profile(record.records[0].id, data.Email, data.Password, data.Username, data.TotalGames, data.MaxScore, data.AverageScore);
                 window.sessionStorage.setItem('loggedUser', JSON.stringify(profile));
                 window.location.href = 'mainMenu.html';
             }
