@@ -51,6 +51,10 @@
             gameEnded = false;
             capturingZone = false;         
 
+            const playground = document.querySelector('.playground');
+            while(playground.firstChild){
+                playground.removeChild(playground.firstChild);
+            }
             createCapturezone(3);
             updateLifeCounter();
             document.querySelector('.score').innerText = 0;
