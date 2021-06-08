@@ -1,7 +1,13 @@
+html{
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
 
 /*
     CSS for basic playersettings
 */
+
 main #player{
     transform: scale(2);
     position: absolute;
@@ -9,6 +15,34 @@ main #player{
     width: 5rem;
 }
 
+
+/*
+    CSS playerinfo
+*/
+
+main .playerinfo{
+    display: flex;
+    justify-content: space-between;
+}
+
+main .playerinfo div .score{
+    font-size: 5rem;
+    width: auto;
+}
+
+main .playerinfo div .hearts{
+    display: flex;
+    width: auto;
+}
+
+
+/*
+    CSS for projectilelook
+*/
+
+main .playground .projectile{
+    position: absolute;
+}
 
 main .playground .down{
     background-color: purple;
@@ -25,3 +59,23 @@ main .playground .left{
 main .playground .right{
     background-color: red;
 }
+
+
+/*
+    CSS for capturzone
+*/
+
+main .playground .capturezone{
+    position: absolute;
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+main .playground .capturezone .captureLetter{
+    color: white;
+    font-size: 5rem;
+}
+
+

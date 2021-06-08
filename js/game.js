@@ -7,9 +7,20 @@
         //Assignments of variables used globally
 
         let user = JSON.parse(window.sessionStorage.getItem('loggedUser'));
-        let playerCycle;
+
         const player = document.getElementById('player');
+        const modal = document.getElementById("myModal");
+        const finalColor = 'rgb(255, 20, 147)';
         const timerSetting = 500;
+        let transitionNumber = 0;
+
+        let playerCycle;
+        let capturingZone;
+        let lastContestedZone;
+        let scoreModifier;
+        let pauzedGame;
+        let gameEnded;
+        let lives;
 
 
         //Timers
@@ -17,21 +28,41 @@
         let projectileCreationTimer;
         let projectileShootTimer;
         let collisionDetectionTimer;
+        let capturingTimer;
+        let scoreTimer;
 
 
 
         //Setup code for positioning, etc
 
         //px is being used for more consistent results
-        const setupCode = function(){
+        const setupCode = function(restartGame){
             player.style.left = 50 + 'px';
             player.style.top = 50 + 'px';
             player.style.width = 50 + 'px';
             player.style.height = 35 + 'px';
 
-            projectileCreationTimer = setInterval(createProjectile, timerSetting/2);
-            projectileShootTimer = setInterval(shootProjectiles, timerSetting/2);
-            collisionDetectionTimer = setInterval(collisionDetection, timerSetting/timerSetting);
+            lastContestedZone = '';
+            lives = 3;
+            scoreModifier = 1;
+            transitionNumber = 0;
+            pauzedGame = false;
+            gameEnded = false;
+            capturingZone = false;         
+
+            createCapturezone(3);
+            document.querySelector('.score').innerText = 0;
+            modal.style.display = 'none';
+            modal.querySelector('h2').innerText = 'Game is pauzed';
+            for(let heart of document.querySelectorAll('.heart')){
+                heart.style.display = 'inline-block';
+            }
+
+            if(restartGame){
+                clearTimers();
+            }
+            setupTimers();
+            
         };
         
 
@@ -39,6 +70,21 @@
 
 
         //Gamefunctions
+
+        const setupTimers = function(){
+            projectileCreationTimer = setInterval(createProjectile, timerSetting/2);
+            projectileShootTimer = setInterval(shootProjectiles, timerSetting/2);
+            collisionDetectionTimer = setInterval(collisionDetection, 1);
+            scoreTimer = setInterval(increaseScore, timerSetting*2);
+        };
+
+        const clearTimers = function(){
+            clearInterval(projectileShootTimer);
+            clearInterval(collisionDetectionTimer);
+            clearInterval(projectileCreationTimer);
+            clearInterval(capturingTimer);
+            clearInterval(scoreTimer);
+        };
 
         //Function that makes player move horizontally, will also change his animation based on the pressed button
         const moveCharacterHorizontally = function(xValues){
@@ -115,10 +161,75 @@
 
         //Function which ends game, terminating all timers and updating data on airtable
         const endGame = function(){
-            console.log('ending game');
-            clearInterval(projectileShootTimer);
-            clearInterval(collisionDetectionTimer);
-            clearInterval(projectileCreationTimer);
+            console.log('game ended')
+            modal.querySelector('h2').innerText = 'You died';
+            gameEnded = true;
+            clearTimers();
+            modal.style.display = 'inline-block';
+        };
+
+        const pauzeGame = function(){
+            console.log('pauzing game');
+            pauzedGame = !pauzedGame;
+             if(!gameEnded){
+                if(pauzedGame){
+                    clearTimers();
+                    modal.style.display = 'inline-block';
+                }
+                else{
+                    setupTimers();
+                    modal.style.display = 'none';
+                }
+            } 
+        };
+
+        //Function that creates new capturezone a certain amount of capturezones with random positioning
+        const createCapturezone = function(maxZones){
+            const playground = document.querySelector('.playground');
+            
+
+            for(let dmx = 0; dmx < maxZones; dmx++){
+                const newCapturezone = document.createElement('div');
+                const captureLetter = document.createElement('p');
+                captureLetter.classList.add('captureLetter');
+                captureLetter.innerText = 'C';
+                newCapturezone.appendChild(captureLetter);
+                const offsetWidth = random(0, (window.outerWidth - 100));
+                const offsetHeight = random(0, (window.outerHeight - 100));
+
+                newCapturezone.style.width = '50px';
+                newCapturezone.style.height = '50px';
+                newCapturezone.style.top = offsetHeight + 'px';
+                newCapturezone.style.left = offsetWidth + 'px';
+                newCapturezone.classList.add('capturezone');
+                playground.appendChild(newCapturezone);
+            }
+        };
+
+        //Increases scoreModifier based on amount of captured zones
+        const increaseScoreModifier = function(){
+            let scoreIncrease = 0;
+            const capturezones = document.querySelectorAll('.capturezone');
+            for(let capturezone of capturezones){
+                if(capturezone.style.backgroundColor === finalColor){
+                    scoreIncrease++;
+                }
+            }        
+            scoreModifier = 1 + scoreIncrease;   
+        };
+
+        //Reduces lives and hides a heart
+        const reduceLives = function(){
+            lives = lives - 1;
+            if(lives <= 0){
+                endGame();
+            }
+        };
+
+        //Removes projectile from playground
+        const removeProjectile = function(projectile){
+            const playground = document.querySelector('.playground');
+            playground.removeChild(projectile);
         };
 
 
@@ -187,26 +298,73 @@
                     projectile.style.left = parseInt(projectile.style.left) - parseInt(projectile.getAttribute('projectileSpeed')) + 'px';
                 }
                 if((parseInt(projectile.style.top) > (window.outerHeight - 10) || parseInt(projectile.style.top) < 0) || ((parseInt(projectile.style.left) < 0) || parseInt(projectile.style.left) > (window.outerWidth - 10)) ){
-                    playground.removeChild(projectile);
+                    removeProjectile(projectile);
                 }
             }
         };
 
+        //Function which checks each div that can collide with the player, results depend on which div made contact
         const collisionDetection = function(){
             const projectiles = document.querySelectorAll('.projectile');
+            let detectedCapture = false;
             for(let projectile of projectiles){
                 if(detectCollision(projectile, player)){
-                    projectile.style.backgroundColor = 'green';
+                    removeProjectile(projectile);
+                    reduceLives();
                 }
             }
+
+            const capturezones = document.querySelectorAll('.capturezone');
+            for(let capturezone of capturezones){
+                if(detectCollision(capturezone, player)){
+                    detectedCapture = true;
+                    if(!capturingZone && (capturezone.style.backgroundColor !== finalColor)){
+                        lastContestedZone = capturezone;
+                        capturingTimer = setInterval(transitioncaptureground, timerSetting*2);
+                        capturingZone = true;
+                        break;
+                    }
+                }
+            }
+            if(!detectedCapture && capturingZone && (lastContestedZone !== '')){
+                lastContestedZone.style.backgroundColor = 'gray';
+                clearInterval(capturingTimer);
+                transitionNumber = 0;
+                lastContestedZone = '';
+                capturingZone = false;
+            }
         };
+
+        //Slowly changes contested capturezone to it's final color
+        const transitioncaptureground = function(){
+            let colorTransition =  ['#CE6766', '#C92208', '#B8300B', '#AD201A', finalColor];
+
+            lastContestedZone.style.backgroundColor = colorTransition[transitionNumber];
+            //lastContestedZone.style.backgroundColor = 'deeppink';
+            transitionNumber = transitionNumber + 1;
+
+            if(lastContestedZone.style.backgroundColor === finalColor){
+                lastContestedZone = '';
+                clearInterval(capturingTimer);
+                transitionNumber = 0;
+                capturingZone = false;
+                increaseScoreModifier();
+            }
+        }
+
+        //Increases score based on scoreModifier
+        const increaseScore = function(){
+            const scorefield = document.querySelector('.score');
+            scorefield.innerText = parseInt(scorefield.innerText) + scoreModifier * 1;
+        }
+
 
 
         
 
         //Single call of functions which setup gamemechanics
 
-        setupCode();
+        setupCode(false);
 
 
 
@@ -216,18 +374,46 @@
 
         //Detects keypress and will move character when pressing arrow keys
         window.onkeydown = function(pressedKey){
-            switch(pressedKey.keyCode){
-                case 27: endGame();break; //Pressed Escape Key
-                case 37: moveCharacterHorizontally(-1);break; //Pressed Left Arrow Key
-                case 39: moveCharacterHorizontally(1);break; //Pressed Right Arrow Key
-                case 38: moveCharacterVertically(-1);break; //Pressed Up Arrow Key
-                case 40: moveCharacterVertically(1);break; //Pressed Bottom Arrow Key
+            if(!gameEnded && (!pauzedGame || pressedKey.keyCode === 27 )){
+                switch(pressedKey.keyCode){
+                    case 27: pauzeGame();break; //Pressed Escape Key
+                    case 37: moveCharacterHorizontally(-1);break; //Pressed Left Arrow Key
+                    case 39: moveCharacterHorizontally(1);break; //Pressed Right Arrow Key
+                    case 38: moveCharacterVertically(-1);break; //Pressed Up Arrow Key
+                    case 40: moveCharacterVertically(1);break; //Pressed Bottom Arrow Key
+                }
             }
         }
+
+        document.getElementById('restartButton').addEventListener('click', (e) =>{
+            e.preventDefault();
+            setupCode();
+        });
 
         //Detecs when arrow buttons are no longer pressed and changes playercycle back to idle animation
         window.onkeyup = function(){
             changeCharacterAnimation('Idle_Cycle.gif')
+        }
+
+
+
+
+
+        //Modal functions
+
+        // When the user clicks on <span> (x), close the modal
+        document.getElementsByClassName("close")[0].addEventListener('click', () =>{
+            if(!gameEnded & pauzedGame){
+                pauzeGame();
+            }
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if(!gameEnded & pauzedGame){
+                console.log('outside modal');
+                pauzeGame(true);
+            }
         }
     });
 })();

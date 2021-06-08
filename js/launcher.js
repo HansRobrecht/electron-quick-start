@@ -7,9 +7,14 @@
         window.addEventListener('load', function() {
 
             class Profile {
-                constructor(username, winLossRate){
+                constructor(index, email, password, username, totalGames, maxScore, avgScore){
+                    this.index = index;
+                    this.email = email;
+                    this.password = password;
                     this.username = username;
-                    this.winLossRate = winLossRate;
+                    this.totalGames = totalGames;
+                    this.maxScore = maxScore;
+                    this.avgScore = avgScore;
                 }
             };
 
@@ -84,8 +89,9 @@
                                         "Email": document.getElementById('email').value.toLowerCase(),
                                         "Password": document.getElementById('password').value,
                                         "Username": 'Guest',
-                                        "Wins": 0,
-                                        "Losses": 0
+                                        "TotalGames": 0,
+                                        "MaxScore": 0, 
+                                        "AverageScore": 0
                                     }
                                 }]  
                             })
@@ -102,10 +108,8 @@
 
             const processProfile = function(record){
                 const data = record.records[0].fields;
-                let profile = new Profile(data.Username, `${data.Wins}-${data.Losses}`);
+                let profile = new Profile(record.records[0].index, data.Email, data.Password, data.Username, data.TotalGames, data.MaxScore, data.AverageScore);
                 window.sessionStorage.setItem('loggedUser', JSON.stringify(profile));
-                console.log(profile);
-                console.log(window.sessionStorage.getItem('loggedUser').split(','));
                 window.location.href = 'mainMenu.html';
             }
         

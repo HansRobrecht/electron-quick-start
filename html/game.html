@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/common.css">
     <link rel="stylesheet" href="../css/game.css">
-    <link rel="stylesheet" href="../css/MovementTesting.css">
+    <link rel="stylesheet" href="../css/modal.css">    
 </head>
 <body>
     <header>
@@ -16,12 +16,38 @@
     </header>
     <main>
         <img id="player" src="../img/Idle_Cycle.gif">
-        <p class="score">0</p>
+        <div class="playerinfo">
+            <div>
+                <p class="score">0</p>
+            </div>
+            <div>
+                <ul class="hearts">
+                    <li><img src="../img/heart.png" class="heart heartOne"></img></li>
+                    <li><img src="../img/heart.png" class="heart heartTwo"></img></li>
+                    <li><img src="../img/heart.png" class="heart heartThree"></img></li>
+                </ul>
+            </div>
+        </div>
         <div class="playground"></div>
     </main> 
     <footer>
 
     </footer>
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="gameMenu">
+                <h2>Game is pauzed</h2>
+                <div class="buttons">
+                    <a href="mainMenu.html">Return to main menu</a>
+                    <button id="restartButton">Restart game</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="../js/game.js"></script>
 </body>
 </html>
