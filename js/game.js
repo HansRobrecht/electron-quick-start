@@ -4,16 +4,36 @@
 
     window.addEventListener('load', function() {
 
+        class Profile {
+            constructor(id, email, password, username, totalGames, maxScore, avgScore){
+                this.id = id;
+                this.email = email;
+                this.password = password;
+                this.username = username;
+                this.totalGames = totalGames;
+                this.maxScore = maxScore;
+                this.avgScore = avgScore;
+            }
+        };
+
+
+
+
         //Assignments of variables used globally
 
         let profile = JSON.parse(window.sessionStorage.getItem('loggedUser'));
         console.log(profile);
+        console.log(typeof profile.avgScore)
 
         const player = document.getElementById('player');
         const modal = document.getElementById("myModal");
         const finalColor = 'rgb(255, 20, 147)';
         const timerSetting = 500;
         let transitionNumber = 0;
+
+        const animation_left = ['../img/animations/bat_horizontal_left.gif', '../img/animations/chicken_left.gif', '../img/animations/skull_red.gif'];
+        const animation_right = ['../img/animations/bat_horizontal_left.gif', '../img/animations/chicken_left.gif'];
+        const animation_vertical = ['../img/animations/bear_green.gif', '../img/animations/bear_red.gif', '../img/animations/chicken_left.gif']
 
         let playerCycle;
         let capturingZone;
@@ -22,7 +42,7 @@
         let pauzedGame;
         let gameEnded;
         let lives;
-
+        let score;
 
         //Timers
         
@@ -49,7 +69,8 @@
             transitionNumber = 0;
             pauzedGame = false;
             gameEnded = false;
-            capturingZone = false;         
+            capturingZone = false;     
+            score = 0;    
 
             const playground = document.querySelector('.playground');
             while(playground.firstChild){
@@ -68,9 +89,49 @@
                 clearTimers();
             }
             setupTimers();
-            
         };
         
+
+
+
+        //Airtable connection
+
+        //Updates profilestatistics
+        const updateProfile = function(){
+
+            const data = {
+                "records": [{
+                    "id": profile.id,
+                    "fields": {
+                        "Email": profile.email,
+                        "Password": profile.password,
+                        "Username": profile.username,
+                        "TotalGames": profile.totalGames + 1,
+                        "MaxScore": (profile.maxScore < score) ? score : profile.maxScore, 
+                        "AverageScore": ((profile.avgScore * profile.totalGames + score) / profile.totalGames + 1)
+                    }
+                }]
+            }
+
+            fetch('https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles', {
+                            method: 'PUT',
+                            headers:{
+                                'Authorization' : 'Bearer keyj9zMtJACYaD2uv',
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(record => record.json())
+                        .then(json => copyProfile(json))
+                        .then(delay => modal.style.display = 'inline-block')
+        };
+
+        //Makes copy of new profile so data stays up to date
+        const copyProfile = function(record){
+            const data = record.records[0].fields;
+            let newProfile = new Profile(record.records[0].id, data.Email, data.Password, data.Username, data.TotalGames, data.MaxScore, data.AverageScore);
+            window.sessionStorage.setItem('loggedUser', JSON.stringify(newProfile));
+        }
 
 
 
@@ -171,7 +232,7 @@
             modal.querySelector('h2').innerText = 'You died';
             gameEnded = true;
             clearTimers();
-            modal.style.display = 'inline-block';
+            updateProfile();
         };
 
         const pauzeGame = function(){
@@ -259,6 +320,7 @@
         //Interval functions responsible for gamemechanics
         
         //Function creates a div of class projectile in a random direction with random speed and size
+        //Credits : https://codepen.io/Affafy/pen/orjLzJ
         function createProjectile(){
             const randomDirection = random(0, 3);
             const offset = random(0, (window.outerWidth - 100));
@@ -280,6 +342,7 @@
                     newProjectile.classList.add('up');
                     newProjectile.style.top = (parseInt(window.outerHeight) - 20)  + 'px';
                 }
+                //newProjectile.style.backgroundImage = `url(${animation_vertical[random(0, animation_vertical.length-1)]})`;
             }
             //Projectile horizontal
             else if(randomDirection === 1 || randomDirection === 3){
@@ -289,10 +352,12 @@
                 if(randomDirection === 1){
                     newProjectile.classList.add('left');
                     newProjectile.style.left = (parseInt(window.outerWidth) - 20) + 'px';
+                    //newProjectile.style.backgroundImage = `url(${animation_left[random(0, animation_left.length-1)]})`;
                 }
                 else{
                     newProjectile.classList.add('right');
                     newProjectile.style.left = '1px';
+                    //newProjectile.style.backgroundImage = `url(${animation_left[random(0, animation_left.length-1)]})`;
                 }
             }
             newProjectile.classList.add('projectile');
@@ -375,9 +440,10 @@
 
         //Increases score based on scoreModifier
         const increaseScore = function(){
+            score = score + 1*scoreModifier;
             const scorefields = document.querySelectorAll('.score');
             for(let scorefield of scorefields){
-                scorefield.innerText = parseInt(scorefield.innerText) + scoreModifier * 1;
+                scorefield.innerText = score;
             }
         }
 
