@@ -49,6 +49,40 @@
                     </p>    
                     <a href="instructies.html">More information</a>
                 </div>
+                <div class="personalStatistics">
+                    <form>
+                        <h3>Search for your own statistics</h3>
+                        <div>
+                            <label for="emailInput">Email</label>
+                            <input type="email" name="emailInput" id="emailInput">
+                            <div id="invalidEmail">This mail hasn't been registered</div>
+                        </div>
+                        <div>
+                            <label for="passwordInput">Password</label>
+                            <input type="password" name="passwordInput" id="passwordInput">
+                            <div id="invalidPassword">Password doesn't match with email</div>
+                        </div>
+                        <button id="searchStats">Get statistics</button>
+                    </form>
+                    <div class="stats">
+                        <div>
+                            <h3>Username : </h3>
+                            <p id="usernamePlayer"></p>
+                        </div>
+                        <div>
+                            <h3>Total played games : </h3>
+                            <p id="totalGamesPlayer"></p>
+                        </div>
+                        <div>
+                            <h3>Average score per match : </h3>
+                            <p id="avgScorePlayer"></p>
+                        </div>
+                        <div>
+                            <h3>Highest earned score : </h3>
+                            <p id="maxScorePlayer"></p>
+                        </div>
+                    </div>
+                </div>
             </section>
             <section class="sideContent">
                 <h2>Scoreboard | Top 5 Scorers</h2>
