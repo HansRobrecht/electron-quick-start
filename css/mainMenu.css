@@ -7,19 +7,78 @@ body{
     width: 100vw;
 }
 
+a{
+    display:inline-block;
+    font-size: 3.5rem;
+    text-decoration: none;
+    border: solid 1.5px black;
+    padding: 0.5rem 1rem;
+    color: black;
+    border-radius: 0.5rem;
+}
+
+a:hover{
+    background-color: black;
+    color: #fff;
+    border-color: black;
+}
+
 main{
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     height: 100%;
     width: auto;
 }
 
+main div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main div h2{
+    font-size: 5rem;
+    margin-bottom: 2rem;
+}
+
 main .playerStatistics{
     border: solid 1px black;
+    margin-top: 5rem;
+    padding: 2rem 4rem;
+    border-radius: 0.25rem;
+}
+
+main .playerStatistics div{
+    margin-bottom: 2rem;
+}
+
+
+main .playerStatistics h3{
+    font-size: 2.25rem;
+    margin-bottom: 0.5rem;
+}
+
+main .playerStatistics div:first-of-type h3{
+    font-size: 3rem;
+    margin-bottom: 2.5rem; 
+    font-weight: 700;
+}
+
+main .playerStatistics p{
+    font-size: 1.75rem;
 }
 
 footer{
     justify-self: end;
     align-self: baseline;
     height: auto;
+    margin-bottom: 1rem;
+}
+
+footer a{
+    font-size: 1.5rem;
+    border-radius: 0rem;
+    margin-left: 0.5rem;
 }
