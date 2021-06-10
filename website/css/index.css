@@ -1,4 +1,4 @@
-main{
+main .content{
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -14,23 +14,112 @@ main section.centerContent{
     margin-right: auto;
 }
 
-main section.centerContent .banner{
-    background-image: url(../img/zonelock.png);
+main .banner{
+    background-image: url(../img/squares-pattern.png);
     background-repeat: no-repeat;
     background-size: cover;
-    height: 35vh;
+    height: 15vh;
+    margin-bottom: 5rem;
 }
 
-main section.centerContent .banner h2{
-    margin-top: 6rem;
+main .banner h2{
+    font-size: 5rem;
+    font-weight: 700;
+    margin-left: 1rem;
+    color: greenyellow;
 }
+
+main section.centerContent{
+    width: 65%;
+}
+
+main section.centerContent .gameIntroduction h3{
+    margin-bottom: 1.5rem;
+}
+
+
+main section.centerContent .gameIntroduction p{
+    width: 75%;
+    margin-bottom: 1rem;
+}
+
+main section.sideContent{
+    margin-right: 5rem;
+    align-self: center;
+    display: flex;
+    align-items: center;
+}
+
+main section.sideContent h2{
+    font-size: 2.75rem;
+    width: auto;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+main section.sideContent .scoreboard{
+    border: solid 1px black;
+    border-radius: 0.2rem;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 5rem;
+}
+
+main section.sideContent .scoreboard .top5{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+main section.sideContent .scoreboard .top5 h3{
+    width: auto;
+    font-weight: 500;
+}
+
+main section.sideContent .scoreboard .top5 p{
+    font-size: 2rem;
+}
+
 
 @media only screen and (max-width: 768px){
-    main{
+    main .content{
         flex-direction: column;
+    }
+
+    main section.centerContent{
+        margin-bottom: 5rem;
+        align-items: center;
+        width: 100%;
+    }
+
+    main .banner h2{
+        margin-left: 1rem;
+    }
+
+    main section.centerContent .gameIntroduction{
+        width: 75%;
+    }
+
+    main section.centerContent .gameIntroduction p{
+        width: 85%;
     }
 
     main section.sideContent{
         align-items: center;
+        margin-right: 0rem;
+    }
+
+    main section.sideContent h2{
+        font-size: 2.5rem;
+    }
+
+    main section.sideContent .scoreboard{
+        padding: 2rem 4rem;
+    }
+
+    main section.sideContent .scoreboard h3{
+        font-size: 2rem;
     }
 }
