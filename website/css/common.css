@@ -1,0 +1,155 @@
+html{
+    font-size: 62.5%;
+    box-sizing: content-box;
+}
+
+body{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h2{
+    font-size: 3.5rem;
+}
+
+h3{
+    font-size: 2.5rem;
+}
+
+p{
+    font-size: 1.5rem;
+}
+
+header{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+header div, header div h1{
+    width: auto;
+    height: auto;
+}
+
+header div h1{
+    margin-left: 1rem;
+}
+
+header div h1 a{
+    display: block;
+    white-space: nowrap;
+    width: auto;
+    height: 5.12rem;
+    max-width: 51.2rem;
+    max-height: 51.2rem;
+    text-indent: 100%;
+    background-image: url(../img/shield.svg);
+    background-size: 100% 100%;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+header nav ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+header nav ul li{
+    margin-right: 2rem;
+}
+
+header nav ul li a{
+    font-size: 2rem;
+    text-decoration: none;
+    border: solid 1.5px black;
+    padding: 0.5rem 1rem;
+    color: black;
+    border-radius: 0.5rem;
+}
+
+header nav ul li a.active{
+    color: lightslategrey;
+    border-color: lightslategray
+}
+
+header nav ul li a:hover{
+    background-color: black;
+    color: #fff;
+    border-color: black;
+}
+
+header #hamburgerButton{
+    width: 4rem;
+    height: 4rem;
+    border-radius: 100rem;
+    margin-right: 2rem;
+    background-color: lightgrey;
+    display: none;
+}
+
+header #hamburgerButton:hover{
+    background-color: gray;
+    cursor: pointer;
+}
+
+header #hamburgerButton li{
+    background-color: black;
+    width: 40%;
+    height: 5%;
+}
+
+main{
+    margin-bottom: auto;
+}
+
+footer{
+    flex-shrink: 0;
+}
+
+@media only screen and (max-width: 768px){
+    header #hamburgerButton{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    header nav{
+        display: none;
+        width: 100vw;
+        order: 2;
+        margin-top: 2rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+
+    header nav ul{
+        flex-direction: column;
+        width: 100%;
+        align-items: flex-start;
+    }
+
+    header nav ul li{
+        width: 100%;
+    }
+
+    header nav ul li~li{
+        margin-left: 0rem;
+        margin-top: 0.5rem;
+    }
+
+    header nav ul li a{
+        display: inline-block;
+        width: 100%;
+        border: none;
+    }
+
+    header nav ul li a.active{
+        color: white;
+        background-color: lightslategray;
+    }
+}

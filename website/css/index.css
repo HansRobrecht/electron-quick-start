@@ -1,4 +1,36 @@
-body{
-    background-image: url("../../img/Castle_Background.jpg");
+main{
     display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+main section{
+    display: flex;
+    flex-direction: column;
+}
+
+main section.centerContent{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+main section.centerContent .banner{
+    background-image: url(../img/zonelock.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 35vh;
+}
+
+main section.centerContent .banner h2{
+    margin-top: 6rem;
+}
+
+@media only screen and (max-width: 768px){
+    main{
+        flex-direction: column;
+    }
+
+    main section.sideContent{
+        align-items: center;
+    }
 }
