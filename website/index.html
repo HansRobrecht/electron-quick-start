@@ -22,10 +22,10 @@
                     <a href="index.html" class="active">Home</a>
                 </li>
                 <li>
-                    <a href="instructions.html">Instructions</a>
+                    <a href="html/instructions.html">Instructions</a>
                 </li>
                 <li>
-                    <a href="credits.html">Credits</a>
+                    <a href="html/credits.html">Credits</a>
                 </li>
             </ul>
         </nav>
@@ -62,26 +62,27 @@
                             <input type="password" name="passwordInput" id="passwordInput">
                             <div id="invalidPassword">Password doesn't match with email</div>
                         </div>
-                        <button id="searchStats">Get statistics</button>
+                        <button id="searchStats">Get stats</button>
                     </form>
-                    <div class="stats">
-                        <div>
-                            <h3>Username : </h3>
-                            <p id="usernamePlayer"></p>
-                        </div>
-                        <div>
-                            <h3>Total played games : </h3>
-                            <p id="totalGamesPlayer"></p>
-                        </div>
-                        <div>
-                            <h3>Average score per match : </h3>
-                            <p id="avgScorePlayer"></p>
-                        </div>
-                        <div>
-                            <h3>Highest earned score : </h3>
-                            <p id="maxScorePlayer"></p>
-                        </div>
-                    </div>
+                    <table>
+                        <caption>Personal stats</caption>
+                        <tr>
+                            <th>Username</th>
+                            <td id="usernamePlayer"></td>
+                        </tr>
+                        <tr>
+                            <th>Total played games</th>
+                            <td id="totalGamesPlayer"></td>
+                        </tr>
+                        <tr>
+                            <th>Average score per match</th>
+                            <td id="avgScorePlayer"></td>
+                        </tr>
+                        <tr>
+                            <th>Highest earned score</th>
+                            <td id="maxScorePlayer"></td>
+                        </tr>
+                    </table>
                 </div>
             </section>
             <section class="sideContent">

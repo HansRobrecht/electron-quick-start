@@ -46,7 +46,7 @@
             };
 
             const processStatistics = function(statistics){
-                document.querySelector('.stats').style.display = 'block';
+                document.querySelector('table').style.display = 'inline-block';
                 document.getElementById('usernamePlayer').innerText = statistics.Username;
                 document.getElementById('totalGamesPlayer').innerText = statistics.TotalGames;
                 document.getElementById('avgScorePlayer').innerText = statistics.MaxScore;

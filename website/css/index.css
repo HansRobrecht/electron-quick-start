@@ -49,6 +49,8 @@ main section.centerContent .gameIntroduction p{
 
 main section.centerContent .personalStatistics{
     display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 main section.centerContent .personalStatistics form h3{
@@ -58,6 +60,19 @@ main section.centerContent .personalStatistics form h3{
 main section.centerContent .personalStatistics form div{
     display: flex;
     flex-direction: column;
+    margin-bottom: 1rem;
+}
+
+main section.centerContent .personalStatistics form div label{
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+main section.centerContent .personalStatistics form div input{
+    font-size: 1.5rem;
+    padding: 0.5rem 0rem;
+    width: 75%;
+    font-weight: 300;
 }
 
 main section.centerContent .personalStatistics form div div{
@@ -65,8 +80,48 @@ main section.centerContent .personalStatistics form div div{
     color: red;
 }
 
-main section.centerContent .personalStatistics .stats{
+
+main section.centerContent .personalStatistics button{
+    display:inline-block;
+    font-size: 2rem;
+    text-decoration: none;
+    border: solid 1.5px black;
+    padding: 0.5rem 1rem;
+    color: black;
+    border-radius: 0.5rem;
+}
+
+main section.centerContent .personalStatistics button:hover{
+    background-color: black;
+    color: #fff;
+    border-color: black;
+    cursor: pointer;
+}
+
+main section.centerContent .personalStatistics table{
     display: none;
+    margin-left: 2rem;
+}
+
+main section.centerContent .personalStatistics table tr,   main section.centerContent .personalStatistics table td{
+    border: solid 1px black;
+}
+
+main section.centerContent .personalStatistics table caption{
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+}
+
+main section.centerContent .personalStatistics table th{
+    font-size: 1.5rem;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+}
+
+main section.centerContent .personalStatistics table td{
+    text-align: right;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
 }
 
 main section.sideContent{
@@ -133,9 +188,19 @@ main section.sideContent .scoreboard .top5 p{
         width: 85%;
     }
 
+    main section.centerContent .personalStatistics{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    main section.centerContent .personalStatistics form{
+        margin-bottom: 2rem;
+    }
+
     main section.sideContent{
         align-items: center;
         margin-right: 0rem;
+        margin-bottom: 2rem;
     }
 
     main section.sideContent h2{
