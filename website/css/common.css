@@ -172,7 +172,7 @@ footer a{
     text-decoration: underline;
     color: blue;
     font-size: 1.5rem;
-    padding: none;
+    padding: 0rem;
 }
 
 footer a:hover{
