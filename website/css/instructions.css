@@ -1,0 +1,54 @@
+main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main h2{
+    margin-bottom: 2rem;
+}
+
+main .explanation{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+main .explanation h3{
+    margin-bottom: 2rem;
+}
+
+main .explanation h4{
+    margin-bottom: 1.5rem;
+}
+
+main .explanation ul li p {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+main .explanation div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+main .explanation p{
+    width: 75%;
+    text-align: center;
+}
+
+main .explanation div h4{
+    font-size: 2rem;
+}
+
+main .explanation div .row{
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    margin-top: 1rem;
+}
