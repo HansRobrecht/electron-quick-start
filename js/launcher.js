@@ -76,6 +76,18 @@
             }
 
             const createNewProfile = function(record){
+                let data = {
+                    "records": [{
+                        "fields": {
+                            "Email": document.getElementById('email').value.toLowerCase(),
+                            "Password": document.getElementById('password').value,
+                            "Username": 'Guest',
+                            "TotalGames": 0,
+                            "MaxScore": 0, 
+                            "AverageScore": 0
+                        }
+                    }]  
+                };
                 if(record.records !== undefined && record.records.length === 0){
                     fetch('https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles', {
                             method: 'POST',
@@ -83,18 +95,7 @@
                                 'Authorization' : 'Bearer keyj9zMtJACYaD2uv',
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({
-                                "records": [{
-                                    "fields": {
-                                        "Email": document.getElementById('email').value.toLowerCase(),
-                                        "Password": document.getElementById('password').value,
-                                        "Username": 'Guest',
-                                        "TotalGames": 0,
-                                        "MaxScore": 0, 
-                                        "AverageScore": 0
-                                    }
-                                }]  
-                            })
+                            body: JSON.stringify(data)
                         })
                         .then(record => record.json())
                         .then(json => processProfile(json))
@@ -104,6 +105,7 @@
                     error.style.display = 'inline';
                     error.innerHTML = 'This account already exists';
                 }
+
             };
 
             const processProfile = function(record){

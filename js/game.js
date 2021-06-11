@@ -23,7 +23,7 @@
 
         let profile = JSON.parse(window.sessionStorage.getItem('loggedUser'));
         console.log(profile);
-        console.log(typeof profile.avgScore)
+        //console.log(typeof profile.avgScore)
 
         const player = document.getElementById('player');
         const modal = document.getElementById("myModal");
@@ -108,7 +108,7 @@
                         "Username": profile.username,
                         "TotalGames": profile.totalGames + 1,
                         "MaxScore": (profile.maxScore < score) ? score : profile.maxScore, 
-                        "AverageScore": ((profile.avgScore * profile.totalGames + score) / profile.totalGames + 1)
+                        "AverageScore": ((profile.avgScore === 0) ?  0 : (profile.avgScore * (profile.totalGames) ) ) + score  / (profile.totalGames + 1)
                     }
                 }]
             }
