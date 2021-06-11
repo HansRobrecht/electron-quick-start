@@ -19,7 +19,6 @@
 
             const retrieveStatistics = function(){
                 const inputEmail = document.getElementById('emailInput').value;
-                console.log(inputEmail);
                 const queryString = `?filterByFormula={Email}="${inputEmail}"`;
                 fetch('https://api.airtable.com/v0/appAMnFrTLj28QYno/Profiles' + queryString, {
                             headers:{
