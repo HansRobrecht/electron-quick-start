@@ -122,7 +122,7 @@
                 lookupProfile('login');
             })
 
-            document.getElementById('sign up').addEventListener('click', (e) => {
+            document.getElementById('signUp').addEventListener('click', (e) => {
                 e.preventDefault();
                 for(let error of document.querySelectorAll('.errorLabel')){
                     error.style.display = 'none';
